@@ -1,0 +1,150 @@
+name: 更新照片墙
+
+on:
+  push:
+    branches: [ gh-pages ]
+    paths:
+      - 'photo/**'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update-photos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 扫描照片并生成 photos.html
+        run: |
+          echo "正在扫描 photo/ 目录..."
+          
+          # 生成照片列表 (支持 jpg, jpeg, png, gif, webp)
+          PHOTOS=$(find photo -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.webp" \) | sort | sed 's/^/            { src: "/; s/$/", alt: "Photo" },/' | sed 's/alt: "Photo"/alt: "'"'"'$(basename {} | cut -d. -f1)'"'"'"/')
+          
+          # 创建 photos.html（使用你的风格）
+          cat > photos.html << 'EOF'
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>照片墙 - Sam Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/vno.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/wakatime-theme.css">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="icon" href="./favicon.ico">
+
+    <style>
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            padding: 40px 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .photo-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+        .photo-item:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.97);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .photo-modal img {
+            max-width: 96%;
+            max-height: 96%;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa-solid fa-bars fa-lg btn-mobile-menu__icon"></i>
+        <i class="fa-solid fa-xmark fa-lg btn-mobile-close__icon hidden"></i>
+    </span>
+
+    <header id="panel" class="panel-cover">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <h1 class="panel-cover__title panel-title"><a href="index.html">Sam 的照片墙</a></h1>
+                    <p class="panel-cover__subtitle">记录生活 · 留住瞬间</p>
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
+        </div>
+    </header>
+
+    <div class="photo-grid" id="photoGrid"></div>
+
+    <div class="photo-modal" id="photoModal" onclick="closeModal()">
+        <img id="modalImage" src="" alt="">
+    </div>
+
+    <script>
+        const photos = [
+${PHOTOS}
+        ];
+
+        function loadPhotos() {
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = '';
+            photos.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'photo-item';
+                item.innerHTML = `<img src="${photo.src}" alt="${photo.alt}" onclick="showModal('${photo.src}')">`;
+                grid.appendChild(item);
+            });
+        }
+
+        function showModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('photoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').style.display = 'none';
+        }
+
+        window.onload = loadPhotos;
+    </script>
+
+    <script type="text/javascript" src="./assets/js/main.js"></script>
+</body>
+</html>
+EOF
+
+          echo "照片墙已更新，共 $(ls photo | wc -l) 张照片"
+
+      - name: 提交更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add photos.html
+          git diff --staged --quiet || git commit -m "chore: 自动更新照片墙 ($(date +'%Y-%m-%d %H:%M'))"
+          git push
