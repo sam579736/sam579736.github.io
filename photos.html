@@ -2,129 +2,67 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Sam 的照片墙">
     <title>照片墙 - Sam Home</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/vno.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/wakatime-theme.css">
 
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-    <link rel="icon" href="./favicon.ico">
-
     <style>
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-            padding: 30px 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
         .photo-item {
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+            transition: all 0.3s;
         }
         .photo-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transform: scale(1.04);
         }
         .photo-item img {
             width: 100%;
             height: auto;
             display: block;
         }
-        .photo-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        .photo-modal img {
-            max-width: 95%;
-            max-height: 95%;
-            border-radius: 12px;
-        }
     </style>
 </head>
 <body>
-
-    <!-- 复用首页头部 -->
-    <span class="mobile btn-mobile-menu">
-        <i class="fa-solid fa-bars fa-lg btn-mobile-menu__icon"></i>
-        <i class="fa-solid fa-xmark fa-lg btn-mobile-close__icon hidden"></i>
-    </span>
 
     <header id="panel" class="panel-cover">
         <div class="panel-main">
             <div class="panel-main__inner panel-inverted">
                 <div class="panel-main__content">
-                    <h1 class="panel-cover__title panel-title iUp">
-                        <a href="index.html">Sam 的照片墙</a>
-                    </h1>
-                    <p class="panel-cover__subtitle panel-subtitle iUp">记录生活 · 留住瞬间</p>
+                    <h1 class="panel-cover__title"><a href="index.html">📸 Sam 的照片墙</a></h1>
+                    <p class="panel-cover__subtitle">记录生活 · 留住瞬间</p>
                 </div>
             </div>
-            <div class="panel-cover--overlay cover-slate"></div>
         </div>
     </header>
 
-    <!-- 照片墙主体 -->
-    <div class="photo-grid" id="photoGrid">
-        <!-- JS 动态生成 -->
-    </div>
-
-    <!-- 图片放大弹窗 -->
-    <div class="photo-modal" id="photoModal" onclick="closeModal()">
-        <img id="modalImage" src="" alt="">
-    </div>
+    <div class="photo-grid" id="photoGrid"></div>
 
     <script>
-        // ==================== 在这里添加新照片 ====================
         const photos = [
-            { src: "photo/sfc_kirbyss.jpg", alt: "Kirby" },
-            { src: "photo/sfc_kirbyssz.jpg", alt: "Kirby 2" },
-            // 新增照片请照下面格式添加：
-            // { src: "photo/你的照片文件名.jpg", alt: "简单描述" },
+            "./photo/sfc_kirbyss.jpg",
+            "./photo/sfc_kirbyssz.jpg"
         ];
 
-        // 自动生成照片墙
-        function loadPhotos() {
-            const grid = document.getElementById('photoGrid');
-            grid.innerHTML = '';
-
-            photos.forEach(photo => {
-                const item = document.createElement('div');
-                item.className = 'photo-item';
-                item.innerHTML = `
-                    <img src="${photo.src}" alt="${photo.alt}" 
-                         onclick="showModal('${photo.src}')">
-                `;
-                grid.appendChild(item);
-            });
-        }
-
-        function showModal(src) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('photoModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('photoModal').style.display = 'none';
-        }
-
-        // 页面加载完成后生成照片墙
-        window.onload = loadPhotos;
+        const grid = document.getElementById('photoGrid');
+        
+        photos.forEach(src => {
+            const div = document.createElement('div');
+            div.className = 'photo-item';
+            div.innerHTML = `<img src="${src}" alt="Sam Photo" loading="lazy">`;
+            grid.appendChild(div);
+        });
     </script>
 
-    <script type="text/javascript" src="./assets/js/main.js"></script>
 </body>
 </html>
