@@ -1,109 +1,172 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dmego Home">
-    <meta name="keywords" content="Dmego,Homepage">
-    <meta name="author" content="Dmego">
-    <title>Dmego Home</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/onlinewebfonts.css"/>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/vno.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/wakatime-theme.css">
-    <link rel="apple-touch-icon" href="https://unpkg.com/dmego-home-page@latest/apple-touch-icon.png">
-    <link rel="icon" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
+    <meta name="description" content="Sam Home - 个人站">
+    <meta name="keywords" content="Sam,个人主页">
+    <meta name="author" content="Sam">
+    <title>Sam Home</title>
+
+    <!-- 现代图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <!-- 你的原有样式（已移除未使用的 onlinewebfonts.css） -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/vno.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/wakatime-theme.css">
+
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="icon" href="./favicon.ico">
 </head>
 
 <body>
+    <!-- 移动端菜单（已统一） -->
     <span class="mobile btn-mobile-menu">
-        <i class="social iconfont icon-list btn-mobile-menu__icon"></i>
-        <i class="social iconfont icon-angleup btn-mobile-close__icon hidden"></i>
+        <i class="fa-solid fa-bars fa-lg btn-mobile-menu__icon"></i>
+        <i class="fa-solid fa-xmark fa-lg btn-mobile-close__icon hidden"></i>
     </span>
+
     <header id="panel" class="panel-cover">
         <div class="panel-main">
             <div class="panel-main__inner panel-inverted">
                 <div class="panel-main__content">
+
+                    <!-- 头像区域 -->
                     <div class="ih-item circle effect right_to_left">            
-                        <a href="#" title="" class="blog-button">
-                            <div class="img"><img src="https://unpkg.com/dmego-home-page@latest/assets/img/logo3.jpg" alt="img" class="js-avatar iUp profilepic"></div>
+                        <a href="about.html" title="" class="blog-button">
+                            <div class="img">
+                                <img src="./assets/img/logo3.jpg" alt="Sam" class="js-avatar iUp profilepic">
+                            </div>
                             <div class="info iUp">
                                 <div class="info-back">
-                                    <h2> 
-                                        
-                                            Be Brave
-                                        
-                                    </h2>
-                                    <p>
-                                        
-                                            2026 · 平静
-                                        
-                                    </p>
+                                    <h2>我的生活</h2>
+                                    <p>2026 · 跑步</p>
                                 </div>
                             </div>
                         </a>
                     </div>
+
                     <h1 class="panel-cover__title panel-title iUp">
-                        <a href="#" title="Dmego Home">Dmego</a>
+                        <a href="#" title="Sam Home">Sam</a>
                     </h1>
-                    <p class="panel-cover__subtitle panel-subtitle iUp">Code Create Life</p>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">个人站</p>
+                    
                     <hr class="panel-cover__divider iUp" />
-                    <p id="description" class="panel-cover__description iUp">如何得与凉风约, 不共尘沙一并来!
-                        <br/>
+                    
+                    <p id="description" class="panel-cover__description iUp">
+                        如何得与凉风约, 不共尘沙一并来!<br>
                         <strong>-「中牟道中」</strong>
                     </p>
+
                     <div class="navigation-wrapper iUp">
-                        <div>
-                            <nav class="cover-navigation cover-navigation--primary">
-                                <ul class="navigation">
-                                    <li class="navigation__item">
-                                        <a href="/" class="blog-button">首页</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://dmego.cn" class="blog-button" target="_blank" onclick="event.preventDefault(); showWeChatModal();">博客</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://r.dmego.cn" class="blog-button" target="_blank" onclick="event.preventDefault();">简历</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://dmego.cn/about/" class="blog-button" target="_blank" onclick="event.preventDefault();">关于</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        <!-- 主导航 -->
+                        <nav class="cover-navigation cover-navigation--primary">
+                            <ul class="navigation">
+                                <li class="navigation__item">
+                                    <a href="/" class="blog-button">首页</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="#" class="blog-button" onclick="event.preventDefault(); showWeChatModal();">微信</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://samnas.ccwu.cc" class="blog-button">网盘</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://samlinux.ccwu.cc/admin" class="blog-button">出国</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://samser.ccwu.cc" class="blog-button">PVE</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://www.kdocs.cn/l/cgbhH6VFXrf4" class="blog-button">留言</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="about.html" class="blog-button">关于</a>
+                                </li>
+                            </ul>
+                        </nav>
+
+<!-- 社交导航 -->
                         <div class="iUp">
                             <nav class="cover-navigation navigation--social">
                                 <ul class="navigation">
-                                    <li class="navigation__item">
-                                        <a href="https://github.com/dmego/" title="github" target="_blank">
-                                            <i class='social iconfont icon-github'></i>
-                                            <span class="label">github</span>
-                                        </a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="http://www.cnblogs.com/dmego/" title="cnblogs" target="_blank">
-                                            <i class='social iconfont icon-cnblogs'></i>
-                                            <span class="label">cnblogs</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="navigation__item">
-                                        <a href="https://www.zhihu.com/people/dmego/" title="zhihu" target="_blank">
-                                            <i class='social iconfont icon-zhihu'></i>
-                                            <span class="label">zhihu</span>
-                                        </a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <!-- 加密的邮箱地址, 请自行修改, 或者改用下方的明文方式 -->
-                                        <a href="javascript:decryptEmail('ZG1lYWdvQGdtYWlsLmNvbQ==');" title="email">
-                                        <!-- <a href="test@test.com" title="email"> -->
-                                            <i class='social iconfont icon-email'></i>
-                                            <span class="label">email</span>
-                                        </a>
-                                    </li>
+<li class="navigation__item">
+      <a href="https://github.com/sam579736/" title="GitHub" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-github fa-lg">
+                </i>
+                <span class="label">GitHub
+                </span>
+       </a>
+ </li>
+<li class="navigation__item">
+      <a href="https://x.com/samxwordone" title="X" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-x-twitter">
+                </i>
+                <span class="label">X
+                </span>
+       </a>
+ </li>
+<li class="navigation__item">
+      <a href="https://t.me/sam579736" title="Telegram" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-telegram">
+                </i>
+                <span class="label">Telegram
+                </span>
+       </a>
+ </li>
+<li class="navigation__item">
+      <a href="https://wa.me/qr/XKTKGVBDPCMCJ1" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-whatsapp">
+                </i>
+                <span class="label">WhatsApp
+                </span>
+       </a>
+ </li>
+<li class="navigation__item">
+      <a href="https://ww.facebook.com/sam579736" title="FaceBook" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-facebook">
+                </i>
+                <span class="label">FaceBook
+                </span>
+       </a>
+ </li>
+<li class="navigation__item">
+      <a href="https://www.instagram.com/samisgmcc" title="Instagram" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-instagram">
+                </i>
+                <span class="label">Instagram
+                </span>
+                </a>
+ </li>
+<li class="navigation__item">
+             <a href="http://wpa.qq.com/msgrd?v=3&uin=579736&site=qq&menu=yes" title="QQ" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-qq fa-lg">
+            </i>
+            <span class="label">QQ</span>
+            </a>
+ </li>
+<li class="navigation__item">
+             <a href="https://www.kdocs.cn/l/cgbhH6VFXrf4" title="记事本" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-leanpub">
+            </i>
+            <span class="label">记事本</span>
+            </a>
+ </li>
+<li class="navigation__item">
+             <a href="https://www.reddit.com/r/sam579736" title="Reddit" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-reddit">
+            </i>
+            <span class="label">Reddit</span>
+            </a>
+ </li>
+<li class="navigation__item">
+            <a href="mailto:579736#qq.com" title="Email"  onclick="this.href = this.href.replace('#', '@')">
+            <i class="fa-solid fa-envelope">
+            </i>
+            <span class="label">Email</span>
+            </a>
+</li>
                                 </ul>
                             </nav>
                         </div>
@@ -111,23 +174,27 @@
                 </div>
             </div>
             <div class="panel-cover--overlay cover-slate"></div>
-        </div>
-        <!-- <div class="beian iUp">
-            <a class="icp" href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank">XXX</a>
-            <a class="gwab" href="http://www.beian.gov.cn/portal/recordQuery" target="_blank">XXX</a>
-        </div> -->
+</div>
+        <!-- 底部信息 -->
         <div class="remark iUp">
-            <p class="power">Powered By 
-                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
-                <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
+            <p class="power">
+                Powered By 
+                <a href="https://github.com/features/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a> 
+                And 
+                <a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer">Hitokoto</a>
             </p>
         </div>
     </header>
-    <!-- WeChat Modal -->
-    <div id="wechatModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.3s ease;" onclick="closeWeChatModal()">
-        <img src="./assets/img/wechat.jpg" alt="WeChat" style="max-width: 300px; max-height: 300px; border-radius: 10px;" onclick="event.stopPropagation()">
+
+    <!-- 微信弹窗（优化版） -->
+    <div id="wechatModal" onclick="closeWeChatModal()" 
+         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; opacity: 0; visibility: hidden; transition: all 0.3s ease;">
+        <img src="./assets/img/wechat.jpg" alt="WeChat QR Code" 
+             style="max-width: 320px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);" 
+             onclick="event.stopPropagation()">
     </div>
-    <script type="text/javascript" src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/dmego-home-page@latest/assets/js/theme-loader.js"></script>
+
+    <script type="text/javascript" src="./assets/js/main.js"></script>
+   <!-- <script type="text/javascript" src="./assets/js/theme-loader.js"></script> -->
 </body>
 </html>

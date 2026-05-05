@@ -2,8 +2,8 @@ name: WakaTime Daily Theme Update
 
 on:
   schedule:
-    # 每天北京时间 08:07 (UTC 00:07) 运行一次
-    - cron: '7 0 * * *'
+    # 每天北京时间 08:00 (UTC 00:00) 运行一次
+    - cron: '0 0 * * *'
   # 手动触发
   workflow_dispatch:
     inputs:
@@ -15,9 +15,9 @@ on:
         description: 'Theme name (rest/relaxed/productive/focused/intense/legendary)'
         required: false
         default: ''
-  # push 到 gh-pages 分支时触发
+  # push 到 main 分支时触发
   push:
-    branches: [gh-pages]
+    branches: [main]
     paths:
       - '.github/workflows/daily-theme-update.yml'
 

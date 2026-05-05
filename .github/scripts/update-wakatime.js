@@ -48,7 +48,6 @@ function httpRequestJson(url, method, headers, body) {
       url,
       { method, headers },
       (res) => {
-        res.setEncoding('utf8');
         let raw = '';
         res.on('data', (chunk) => (raw += chunk));
         res.on('end', () => {
@@ -135,23 +134,15 @@ function isHexColor(value) {
 
 function truncateByCodePoints(input, maxLen) {
   if (typeof input !== 'string') return '';
-  const trimmed = input.trim();
-  // 移除替代符号和无效字符，只保留有效的 UTF-8 字符
-  const cleaned = trimmed.replace(/[\ufffd]/g, '').trim();
-  const chars = Array.from(cleaned);
+  const chars = Array.from(input.trim());
   return chars.length > maxLen ? chars.slice(0, maxLen).join('') : chars.join('');
 }
 
 function normalizeAiResult(candidate, fallback) {
   const raw = candidate && typeof candidate === 'object' ? candidate : {};
-  const cleanString = (str) => {
-    if (typeof str !== 'string') return '';
-    // 确保字符串是有效 UTF-8，移除替代符号
-    return str.replace(/[\ufffd]/g, '');
-  };
-  const title = truncateByCodePoints(cleanString(raw.title) || fallback.title, 6);
-  const quote = truncateByCodePoints(cleanString(raw.quote) || fallback.quote, 30);
-  const tarot = truncateByCodePoints(cleanString(raw.tarot) || fallback.tarot, 48);
+  const title = truncateByCodePoints(typeof raw.title === 'string' ? raw.title : fallback.title, 6);
+  const quote = truncateByCodePoints(typeof raw.quote === 'string' ? raw.quote : fallback.quote, 30);
+  const tarot = truncateByCodePoints(typeof raw.tarot === 'string' ? raw.tarot : fallback.tarot, 48);
   const theme_color = isHexColor(raw.theme_color) ? raw.theme_color.trim() : fallback.theme_color;
   return { title, quote, tarot, theme_color };
 }
@@ -254,7 +245,7 @@ async function generateAi(days, stats) {
 - 趋势: ${stats.trend}
 - 巅峰日: ${stats.maxDay.date} (${stats.maxDay.hours}小时)
 
- 请返回严格的 JSON 格式（不要Markdown代码块），文本必须是有效 UTF-8 中文，避免出现乱码或替代符号(�)：
+请返回严格的 JSON 格式（不要Markdown代码块），包含以下字段：
 1. title: 4字短语，概括本周状态（如：代码飞升、系统过载、静默潜行）。
 2. quote: 30字以内的毒舌点评或黑客哲理，幽默且赛博风。
 3. tarot: 塔罗牌名称+Emoji（如：🔥 The Chariot）。
@@ -349,3 +340,4 @@ main().catch((err) => {
   console.error('WakaTime update failed:', err);
   process.exit(1);
 });
+

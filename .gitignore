@@ -1,16 +1,6 @@
 # macOS
 .DS_Store
 
-# Local env files (never commit secrets)
-.env
-.env.*
-!.env.example
-
-# Node
-node_modules/
-dist/
-build/
-
 # Windows
 Thumbs.db
 

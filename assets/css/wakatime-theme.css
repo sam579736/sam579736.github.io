@@ -391,15 +391,6 @@
   color: #aaa;
 }
 
-.weekly-modal.is-loading .ai-insight p {
-  color: #666;
-}
-
-.weekly-modal.is-loading .weekly-chart-container .weekly-line,
-.weekly-modal.is-loading .weekly-chart-container .weekly-fill {
-  opacity: 0.25;
-}
-
 /* Metrics Grid */
 .stats-grid {
   display: grid;

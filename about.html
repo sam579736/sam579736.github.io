@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sam - 个人简介">
+    <title>关于我 - Sam</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/vno.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/wakatime-theme.css">
+    <link rel="icon" href="./favicon.ico">
+
+    <style>
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            color: #fff;
+            text-decoration: none;
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-3px);
+        }
+        @media (max-width: 768px) {
+            .social-links a {
+                padding: 12px 20px;
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panel-cover" id="panel">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+
+                    <h1 class="panel-cover__title iUp">关于我</h1>
+                    <hr class="panel-cover__divider iUp" />
+
+                    <div class="about-content iUp">
+                        <p>我是 <strong>Sam</strong>，暂时热爱运动的普通人。</p>
+                        <h2>目前在做的事</h2>
+                        <ul>
+                            <li>🏃 坚持跑步骑行</li>
+                            <li>💻 学习新的技术</li>
+                            <li>📝 记录运动生活</li>
+                            <li>🌱 正在老去中....</li>
+                        </ul>
+<div class="social-links"> 
+    <a href="https://github.com/sam579736/" title="GitHub" target="_blank" rel="noopener noreferrer"> <i class="fa-brands fa-github fa-lg"></i></a>
+    <a href="https://x.com/samxwordone" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+    <a href="https://t.me/sam579736" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i></a>
+    <a href="https://wa.me/qr/XKTKGVBDPCMCJ1" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="https://ww.facebook.com/sam579736" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
+    <a href="https://www.instagram.com/samisgmcc" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=579736&site=qq&menu=yes" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-qq"></i></a>
+    <a href="https://www.kdocs.cn/l/cgbhH6VFXrf4" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-leanpub"></i></a>   
+    <a href="https://www.reddit.com/r/sam579736" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-reddit"></i></a>
+    <a href="mailto:579736#qq.com" onclick="this.href = this.href.replace('#', '@')" title="发送邮件"><i class="fa-solid fa-envelope"></i></a>
+</div>
+                    </div>
+
+                    <div class="back-home iUp">
+                        <a href="/" class="blog-button">← 返回首页</a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
+        </div>
+    </div>
+
+    <!-- 引入 JS 文件 -->
+    <script type="text/javascript" src="./assets/js/main.js"></script>
+    <!-- <script type="text/javascript" src="./assets/js/theme-loader.js"></script> -->
+
+    <!-- 手动触发背景切换（关键修复） -->
+    <script>
+        window.addEventListener('load', function() {
+            // 强制执行主题加载
+            if (typeof loadConfig === 'function') {
+                loadConfig();
+            } else if (window.WAKATIME_CONFIG) {
+                applyTheme(window.WAKATIME_CONFIG);
+            }
+            console.log('🎨 关于页面背景切换已触发');
+        });
+    </script>
+</body>
+</html>

@@ -69,9 +69,6 @@
     }
   };
 
-  var SCRIPT_CACHE = {};
-  var LAST_CONFIG = null;
-
   function loadConfig() {
     // Debug: Check URL parameters first
     // Example: ?theme=focused&hours=6
@@ -118,54 +115,9 @@
     document.body.appendChild(script);
   }
 
-  function loadScriptCached(url, callback) {
-    if (SCRIPT_CACHE[url] && SCRIPT_CACHE[url].state === 'loaded') {
-      callback(null);
-      return;
-    }
-    if (SCRIPT_CACHE[url] && SCRIPT_CACHE[url].state === 'loading') {
-      SCRIPT_CACHE[url].callbacks.push(callback);
-      return;
-    }
-
-    SCRIPT_CACHE[url] = { state: 'loading', callbacks: [callback] };
-
-    var script = document.createElement('script');
-    script.src = url;
-    script.onload = function() {
-      var callbacks = SCRIPT_CACHE[url].callbacks.slice();
-      SCRIPT_CACHE[url].state = 'loaded';
-      SCRIPT_CACHE[url].callbacks = [];
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i](null);
-      }
-    };
-    script.onerror = function() {
-      var callbacks = SCRIPT_CACHE[url].callbacks.slice();
-      SCRIPT_CACHE[url].state = 'error';
-      SCRIPT_CACHE[url].callbacks = [];
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i](new Error('Failed to load ' + url));
-      }
-    };
-    document.body.appendChild(script);
-  }
-
-  function getWeeklyUrl(config) {
-    var version = (config && (config.updated_at || config.date)) ? String(config.updated_at || config.date) : '';
-    if (!version) return 'assets/json/weekly.js';
-    return 'assets/json/weekly.js?v=' + encodeURIComponent(version);
-  }
-
-  function prefetchWeekly(config) {
-    var url = getWeeklyUrl(config);
-    loadScriptCached(url, function() {});
-  }
-
   function applyTheme(config) {
     var themeName = config.theme_name || 'rest';
     var theme = THEMES[themeName] || THEMES.rest;
-    LAST_CONFIG = config;
     
     document.documentElement.style.setProperty('--bg-gradient', theme.gradient);
     document.documentElement.style.setProperty('--animation-speed', theme.animationSpeed);
@@ -195,8 +147,7 @@
     updateStatusDisplay(config, theme);
     
     // 初始化周报弹窗交互
-    initWeeklyStats(config, theme);
-    prefetchWeekly(config);
+    initWeeklyStats(theme);
     
     if (themeName === 'intense' || themeName === 'legendary') {
       addParticleEffects();
@@ -222,7 +173,7 @@
                          '<span class="wt-text">' + theme.name + ' · ' + config.hours + 'h</span>';
   }
 
-  function initWeeklyStats(config, theme) {
+  function initWeeklyStats(theme) {
     var statusEl = document.getElementById('wakatime-status');
     if (!statusEl) return;
     
@@ -238,37 +189,72 @@
         existingModal.classList.add('show');
         return;
       }
-
-      var modal = createWeeklyModal(theme);
-      document.body.appendChild(modal);
-      void modal.offsetWidth;
-      setTimeout(function() {
-        modal.classList.add('show');
-      }, 10);
-
-      var url = getWeeklyUrl(config || LAST_CONFIG);
-      loadScriptCached(url, function(err) {
+      
+      // 加载数据 via Script tag
+      loadScript('assets/json/weekly.js', function(err) {
         if (!err && window.WAKATIME_WEEKLY) {
-          renderWeeklyModal(modal, window.WAKATIME_WEEKLY, theme);
+          showWeeklyModal(window.WAKATIME_WEEKLY, theme);
         } else {
-          renderWeeklyModalError(modal);
+          console.error('Failed to load weekly data', err);
         }
       });
     });
   }
 
-  function createWeeklyModal(theme) {
-    var chartHeight = 100;
-    var chartWidth = 340;
-
+  function showWeeklyModal(data, theme) {
     var modal = document.createElement('div');
-    modal.className = 'weekly-modal is-loading';
+    modal.className = 'weekly-modal';
+    
+    // 生成 SVG 平滑曲线图 (Catmull-Rom Spline)
+    var chartHeight = 100;
+    var chartWidth = 340; 
+    var maxHours = Math.max(...data.days.map(d => d.hours), 1); 
+    
+    // 计算点坐标
+    var points = data.days.map((day, index) => {
+      var x = (index / (data.days.length - 1)) * chartWidth;
+      var y = chartHeight - (day.hours / maxHours) * chartHeight;
+      return {x, y};
+    });
+
+    // 生成平滑路径 (Catmull-Rom)
+    function catmullRom2bezier(points) {
+      var result = [];
+      for (var i = 0; i < points.length - 1; i++) {
+        var p0 = i === 0 ? points[0] : points[i - 1];
+        var p1 = points[i];
+        var p2 = points[i + 1];
+        var p3 = i + 2 < points.length ? points[i + 2] : p2;
+
+        var cp1x = p1.x + (p2.x - p0.x) / 6;
+        var cp1y = p1.y + (p2.y - p0.y) / 6;
+        var cp2x = p2.x - (p3.x - p1.x) / 6;
+        var cp2y = p2.y - (p3.y - p1.y) / 6;
+
+        result.push(`C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`);
+      }
+      return result.join(' ');
+    }
+
+    var pathD = `M ${points[0].x},${points[0].y} ` + catmullRom2bezier(points);
+    // 闭合路径用于填充
+    var fillD = pathD + ` L ${chartWidth},${chartHeight + 20} L 0,${chartHeight + 20} Z`;
+
+    function isHexColor(value) {
+      return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value.trim());
+    }
+    function safeNumber(value, fallback) {
+      var n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    var badgeColor = isHexColor(data && data.ai && data.ai.theme_color) ? data.ai.theme_color.trim() : theme.colors.c1;
 
     modal.innerHTML =
       '<div class="modal-backdrop"></div>' +
       '<div class="modal-content">' +
         '<div class="modal-header">' +
-          '<div class="ai-badge" style="--badge-color: ' + theme.colors.c1 + '"></div>' +
+          '<div class="ai-badge" style="--badge-color: ' + badgeColor + '"></div>' +
           '<h2>SYSTEM MONITOR</h2>' +
         '</div>' +
         '<div class="weekly-chart-container">' +
@@ -283,107 +269,48 @@
                 '<stop offset="100%" stop-color="' + theme.colors.c1 + '" stop-opacity="0"></stop>' +
               '</linearGradient>' +
             '</defs>' +
-            '<path class="weekly-fill" fill="url(#chartGradient)"></path>' +
-            '<path class="weekly-line" fill="none" stroke="' + theme.colors.c1 + '" stroke-width="1.5" stroke-linecap="round"></path>' +
+            '<path d="' + fillD + '" fill="url(#chartGradient)"></path>' +
+            '<path d="' + pathD + '" fill="none" stroke="' + theme.colors.c1 + '" stroke-width="1.5" stroke-linecap="round"></path>' +
           '</svg>' +
         '</div>' +
-        '<div class="ai-insight"><p>Loading...</p></div>' +
+        '<div class="ai-insight"><p></p></div>' +
         '<div class="stats-grid">' +
-          '<div class="stat-item"><span class="val">--</span><span class="key">TOTAL</span></div>' +
-          '<div class="stat-item"><span class="val">--</span><span class="key">AVG</span></div>' +
-          '<div class="stat-item"><span class="val">--</span><span class="key">PEAK</span></div>' +
+          '<div class="stat-item"><span class="val"></span><span class="key">TOTAL</span></div>' +
+          '<div class="stat-item"><span class="val"></span><span class="key">AVG</span></div>' +
+          '<div class="stat-item"><span class="val"></span><span class="key">PEAK</span></div>' +
         '</div>' +
       '</div>';
 
-    modal.querySelector('.modal-backdrop').addEventListener('click', function() {
-      modal.classList.remove('show');
-      setTimeout(function() { modal.remove(); }, 200);
-    });
-
-    return modal;
-  }
-
-  function isHexColor(value) {
-    return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value.trim());
-  }
-
-  function safeNumber(value, fallback) {
-    var n = Number(value);
-    return Number.isFinite(n) ? n : fallback;
-  }
-
-  function catmullRom2bezier(points) {
-    var result = [];
-    for (var i = 0; i < points.length - 1; i++) {
-      var p0 = i === 0 ? points[0] : points[i - 1];
-      var p1 = points[i];
-      var p2 = points[i + 1];
-      var p3 = i + 2 < points.length ? points[i + 2] : p2;
-
-      var cp1x = p1.x + (p2.x - p0.x) / 6;
-      var cp1y = p1.y + (p2.y - p0.y) / 6;
-      var cp2x = p2.x - (p3.x - p1.x) / 6;
-      var cp2y = p2.y - (p3.y - p1.y) / 6;
-
-      result.push('C ' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2.x + ',' + p2.y);
-    }
-    return result.join(' ');
-  }
-
-  function renderWeeklyModal(modal, data, theme) {
-    if (!modal) return;
-
-    modal.classList.remove('is-loading');
-
-    var chartHeight = 100;
-    var chartWidth = 340;
-    var days = (data && Array.isArray(data.days)) ? data.days : [];
-
-    if (days.length < 2) {
-      renderWeeklyModalError(modal);
-      return;
-    }
-
-    var maxHours = Math.max.apply(null, days.map(function(d) { return d.hours; }).concat([1]));
-    var points = days.map(function(day, index) {
-      var x = (index / (days.length - 1)) * chartWidth;
-      var y = chartHeight - (day.hours / maxHours) * chartHeight;
-      return { x: x, y: y };
-    });
-
-    var pathD = 'M ' + points[0].x + ',' + points[0].y + ' ' + catmullRom2bezier(points);
-    var fillD = pathD + ' L ' + chartWidth + ',' + (chartHeight + 20) + ' L 0,' + (chartHeight + 20) + ' Z';
-
-    var fillPath = modal.querySelector('.weekly-fill');
-    var linePath = modal.querySelector('.weekly-line');
-    if (fillPath) fillPath.setAttribute('d', fillD);
-    if (linePath) linePath.setAttribute('d', pathD);
-
-    var badgeColor = isHexColor(data && data.ai && data.ai.theme_color) ? data.ai.theme_color.trim() : theme.colors.c1;
     var badgeEl = modal.querySelector('.ai-badge');
     if (badgeEl) {
-      badgeEl.style.setProperty('--badge-color', badgeColor);
       badgeEl.textContent = (data && data.ai && typeof data.ai.tarot === 'string') ? data.ai.tarot : '';
     }
-
     var quoteEl = modal.querySelector('.ai-insight p');
     if (quoteEl) {
       quoteEl.textContent = (data && data.ai && typeof data.ai.quote === 'string') ? data.ai.quote : '';
     }
-
     var statVals = modal.querySelectorAll('.stat-item .val');
     if (statVals && statVals.length === 3) {
       statVals[0].textContent = String(safeNumber(data && data.stats && data.stats.total_hours, 0)) + 'h';
       statVals[1].textContent = String(safeNumber(data && data.stats && data.stats.daily_avg, 0)) + 'h';
       statVals[2].textContent = String(safeNumber(data && data.stats && data.stats.max_day && data.stats.max_day.hours, 0)) + 'h';
     }
-  }
-
-  function renderWeeklyModalError(modal) {
-    if (!modal) return;
-    modal.classList.remove('is-loading');
-    var quoteEl = modal.querySelector('.ai-insight p');
-    if (quoteEl) quoteEl.textContent = '加载失败，请稍后再试';
+    
+    document.body.appendChild(modal);
+    
+    // Force Reflow: 强制浏览器计算初始状态，确保 transition 能生效
+    void modal.offsetWidth;
+    
+    // 延迟添加 show 类，触发动画
+    setTimeout(function() {
+      modal.classList.add('show');
+    }, 10);
+    
+    // 点击背景关闭
+    modal.querySelector('.modal-backdrop').addEventListener('click', function() {
+      modal.classList.remove('show');
+      setTimeout(function() { modal.remove(); }, 200);
+    });
   }
 
   function addParticleEffects() {

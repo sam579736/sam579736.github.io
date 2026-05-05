@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>照片墙 - Sam Home</title>
+    <meta name="description" content="Sam 的照片墙">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/vno.css">
+    
+    <style>
+        .photo-wall {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            aspect-ratio: 4 / 3;
+        }
+        
+        .photo-item:hover {
+            transform: scale(1.04);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .photo-item:hover img {
+            transform: scale(1.08);
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: white;
+            padding: 15px 12px 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #lightbox img {
+            max-width: 92%;
+            max-height: 92vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 复用你的导航头部 -->
+    <span class="mobile btn-mobile-menu">
+        <i class="fa-solid fa-bars fa-lg btn-mobile-menu__icon"></i>
+        <i class="fa-solid fa-xmark fa-lg btn-mobile-close__icon hidden"></i>
+    </span>
+
+    <header id="panel" class="panel-cover">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <div class="ih-item circle effect right_to_left">            
+                        <a href="about.html" class="blog-button">
+                            <div class="img">
+                                <img src="./assets/img/logo3.jpg" alt="Sam" class="js-avatar iUp profilepic">
+                            </div>
+                        </a>
+                    </div>
+
+                    <h1 class="panel-cover__title panel-title iUp">
+                        <a href="index.html">Sam</a>
+                    </h1>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">照片墙</p>
+                    
+                    <hr class="panel-cover__divider iUp" />
+                    
+                    <p class="panel-cover__description iUp">
+                        记录生活点滴<br>
+                        <strong>2026</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="photo-wall">
+        <div id="photoGrid" class="grid"></div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        // ==================== 照片墙核心逻辑 ====================
+const photos = [
+    { filename: "2026-04-beijing.jpg", title: "北京春日" },
+    { filename: "2026-04-run.jpg", title: "跑步日常" },
+    { filename: "2026-05-hangzhou.jpg", title: "西湖" },
+    // 新增照片时只需在这里加一行即可
+ "sfc_kirbyss",title: "北京春日"
+];
+
+        // 自动生成照片墙
+        function renderPhotos() {
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = '';
+
+            photos.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'photo-item';
+                item.innerHTML = `
+                    <img src="photo/${photo.filename}" alt="${photo.title || photo.filename}" loading="lazy">
+                    ${photo.title ? `<div class="photo-overlay">${photo.title}</div>` : ''}
+                `;
+                item.onclick = () => openLightbox(`photo/${photo.filename}`);
+                grid.appendChild(item);
+            });
+        }
+
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        // ==================== 初始化 ====================
+        window.onload = () => {
+            renderPhotos();
+        };
+    </script>
+
+    <script type="text/javascript" src="./assets/js/main.js"></script>
+</body>
+</html>
