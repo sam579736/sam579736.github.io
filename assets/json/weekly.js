@@ -1,11 +1,16 @@
 window.WAKATIME_WEEKLY = {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "updated_at": "2026-05-05T03:42:58.041Z",
+=======
+  "updated_at": "2026-05-12T04:00:35.719Z",
+>>>>>>> 822c29746465d794681c702b31a1801f5944e236
   "stats": {
-    "total_hours": 22.36,
-    "daily_avg": 3.19,
+    "total_hours": 39.34,
+    "daily_avg": 5.62,
     "trend": "falling",
     "max_day": {
+<<<<<<< HEAD
       "date": "2026-04-29",
       "hours": 8.61,
       "text": "8 hrs 36 mins"
@@ -20,21 +25,33 @@ window.WAKATIME_WEEKLY = {
       "hours": 5.1,
       "text": "5 hrs 6 mins"
 >>>>>>> 2b87bd9 (Update website files, workflows, and new pages)
+=======
+      "date": "2026-05-07",
+      "hours": 9.57,
+      "text": "9 hrs 34 mins"
+>>>>>>> 822c29746465d794681c702b31a1801f5944e236
     }
   },
   "days": [
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "date": "2026-04-29",
       "hours": 8.61,
       "text": "8 hrs 36 mins"
+=======
+      "date": "2026-05-06",
+      "hours": 6.01,
+      "text": "6 hrs"
+>>>>>>> 822c29746465d794681c702b31a1801f5944e236
     },
     {
-      "date": "2026-04-30",
-      "hours": 7.13,
-      "text": "7 hrs 7 mins"
+      "date": "2026-05-07",
+      "hours": 9.57,
+      "text": "9 hrs 34 mins"
     },
     {
+<<<<<<< HEAD
       "date": "2026-05-01",
 =======
       "date": "2026-01-16",
@@ -91,5 +108,37 @@ window.WAKATIME_WEEKLY = {
     "tarot": "⚡ The Magician",
     "theme_color": "#00ffe7"
 >>>>>>> 2b87bd9 (Update website files, workflows, and new pages)
+=======
+      "date": "2026-05-08",
+      "hours": 8.09,
+      "text": "8 hrs 5 mins"
+    },
+    {
+      "date": "2026-05-09",
+      "hours": 5.93,
+      "text": "5 hrs 55 mins"
+    },
+    {
+      "date": "2026-05-10",
+      "hours": 1.13,
+      "text": "1 hr 7 mins"
+    },
+    {
+      "date": "2026-05-11",
+      "hours": 8.53,
+      "text": "8 hrs 32 mins"
+    },
+    {
+      "date": "2026-05-12",
+      "hours": 0.08,
+      "text": "4 mins"
+    }
+  ],
+  "ai": {
+    "title": "能量走低",
+    "quote": "代码如潮水，退却时别忘备份灵魂。",
+    "tarot": "💀 The Tower",
+    "theme_color": "#00FFE7"
+>>>>>>> 822c29746465d794681c702b31a1801f5944e236
   }
 };
