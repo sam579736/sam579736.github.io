@@ -36,8 +36,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+
+          node-version: '20'      
+
       - name: Update WakaTime Files
         id: update
         env:
