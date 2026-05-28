@@ -1,15 +1,20 @@
 window.WAKATIME_WEEKLY = {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   "updated_at": "2026-05-05T03:42:58.041Z",
 =======
   "updated_at": "2026-05-12T04:00:35.719Z",
 >>>>>>> 822c29746465d794681c702b31a1801f5944e236
+=======
+  "updated_at": "2026-05-28T04:23:50.718Z",
+>>>>>>> 79c6a600e8167517e099619dcbc8089834a20c29
   "stats": {
-    "total_hours": 39.34,
-    "daily_avg": 5.62,
+    "total_hours": 30.54,
+    "daily_avg": 4.36,
     "trend": "falling",
     "max_day": {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "date": "2026-04-29",
       "hours": 8.61,
@@ -30,10 +35,16 @@ window.WAKATIME_WEEKLY = {
       "hours": 9.57,
       "text": "9 hrs 34 mins"
 >>>>>>> 822c29746465d794681c702b31a1801f5944e236
+=======
+      "date": "2026-05-22",
+      "hours": 7.24,
+      "text": "7 hrs 14 mins"
+>>>>>>> 79c6a600e8167517e099619dcbc8089834a20c29
     }
   },
   "days": [
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       "date": "2026-04-29",
@@ -44,13 +55,19 @@ window.WAKATIME_WEEKLY = {
       "hours": 6.01,
       "text": "6 hrs"
 >>>>>>> 822c29746465d794681c702b31a1801f5944e236
+=======
+      "date": "2026-05-22",
+      "hours": 7.24,
+      "text": "7 hrs 14 mins"
+>>>>>>> 79c6a600e8167517e099619dcbc8089834a20c29
     },
     {
-      "date": "2026-05-07",
-      "hours": 9.57,
-      "text": "9 hrs 34 mins"
+      "date": "2026-05-23",
+      "hours": 4.43,
+      "text": "4 hrs 25 mins"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "date": "2026-05-01",
 =======
@@ -112,33 +129,45 @@ window.WAKATIME_WEEKLY = {
       "date": "2026-05-08",
       "hours": 8.09,
       "text": "8 hrs 5 mins"
+=======
+      "date": "2026-05-24",
+      "hours": 4.14,
+      "text": "4 hrs 8 mins"
+>>>>>>> 79c6a600e8167517e099619dcbc8089834a20c29
     },
     {
-      "date": "2026-05-09",
-      "hours": 5.93,
-      "text": "5 hrs 55 mins"
+      "date": "2026-05-25",
+      "hours": 5.14,
+      "text": "5 hrs 8 mins"
     },
     {
-      "date": "2026-05-10",
-      "hours": 1.13,
-      "text": "1 hr 7 mins"
+      "date": "2026-05-26",
+      "hours": 5.68,
+      "text": "5 hrs 40 mins"
     },
     {
-      "date": "2026-05-11",
-      "hours": 8.53,
-      "text": "8 hrs 32 mins"
+      "date": "2026-05-27",
+      "hours": 2.82,
+      "text": "2 hrs 49 mins"
     },
     {
-      "date": "2026-05-12",
-      "hours": 0.08,
-      "text": "4 mins"
+      "date": "2026-05-28",
+      "hours": 1.09,
+      "text": "1 hr 5 mins"
     }
   ],
   "ai": {
+<<<<<<< HEAD
     "title": "能量走低",
     "quote": "代码如潮水，退却时别忘备份灵魂。",
     "tarot": "💀 The Tower",
     "theme_color": "#00FFE7"
 >>>>>>> 822c29746465d794681c702b31a1801f5944e236
+=======
+    "title": "能量泄漏",
+    "quote": "代码如潮，激情如水，疲惫像病毒悄然蔓延。",
+    "tarot": "🌒 The Hermit",
+    "theme_color": "#00FFD0"
+>>>>>>> 79c6a600e8167517e099619dcbc8089834a20c29
   }
 };
