@@ -36,19 +36,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
 
           node-version: '20'      
 
-=======
-<<<<<<< HEAD
-          node-version: '20'
-      
-=======
-          node-version: '24'
-       
->>>>>>> 90e316337f78020480cecb0461046002b012dccd
->>>>>>> 4ca1c71c42105bb493cf82bdde02cc6bbba7d1b9
       - name: Update WakaTime Files
         id: update
         env:
@@ -60,9 +50,11 @@ jobs:
         run: |
           node .github/scripts/update-wakatime.js
 
-      - name: Commit and Push
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: 'assets/json/config.js assets/json/weekly.js'
-          message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name }}"
-          github_token: ${{ secrets.GH_TOKEN }}
+
+- name: Commit and Push
+  uses: EndBug/add-and-commit@v9
+  with:
+    add: 'assets/json/config.js assets/json/weekly.js'
+    message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name }}"
+    github_token: ${{ secrets.GH_TOKEN }}
+    pull: true  # ← Add this line to pull before pushing
