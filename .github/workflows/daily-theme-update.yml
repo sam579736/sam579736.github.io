@@ -2,10 +2,7 @@ name: WakaTime Daily Theme Update
 
 on:
   schedule:
-    # 每天北京时间 08:07 (UTC 00:07) 运行
     - cron: '7 0 * * *'
-  
-  # 手动触发
   workflow_dispatch:
     inputs:
       hours:
@@ -13,11 +10,9 @@ on:
         required: false
         default: ''
       theme:
-        description: 'Theme name (rest/relaxed/productive/focused/intense/legendary)'
+        description: 'Theme name'
         required: false
         default: ''
-  
-  # push 到 gh-pages 时触发（可选）
   push:
     branches: [gh-pages]
     paths:
@@ -29,35 +24,38 @@ permissions:
 jobs:
   update-theme:
     runs-on: ubuntu-latest
+    env:
+      # 解决 Node 20 警告
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 重要：确保能正确 pull 历史记录
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'   # 升级到 22，解决 Node 20 弃用警告
-          cache: 'npm'         # 可选：加速安装
+          node-version: '22'
+          cache: 'npm'
 
       - name: Update WakaTime Files
         id: update
         env:
           WAKATIME_TOKEN: ${{ secrets.WAKATIME_TOKEN }}
-          MANUAL_HOURS: ${{ github.event.inputs.hours }}
-          MANUAL_THEME: ${{ github.event.inputs.theme }}
-          TZ: 'Asia/Shanghai'
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          TZ: 'Asia/Shanghai'
+          MODEL_DEBUG: '1'               # 开启调试日志
+          MODEL_NAME: 'openai/gpt-4o-mini'
         run: |
           node .github/scripts/update-wakatime.js
 
       - name: Commit and Push
-        uses: EndBug/add-and-commit@v10   # 升级到 v10
+        uses: EndBug/add-and-commit@v10
         with:
           add: 'assets/json/config.js assets/json/weekly.js'
           message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name || 'auto' }}"
           github_token: ${{ secrets.GH_TOKEN }}
-          pull: true                       # 自动 pull 再 push，解决 non-fast-forward
+          pull: true
           default_author: github_actions
