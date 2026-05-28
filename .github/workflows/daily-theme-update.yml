@@ -5,18 +5,8 @@ on:
     - cron: '7 0 * * *'
   workflow_dispatch:
     inputs:
-      hours:
-        description: 'Coding hours (for testing)'
-        required: false
-        default: ''
-      theme:
-        description: 'Theme name'
-        required: false
-        default: ''
-  push:
-    branches: [gh-pages]
-    paths:
-      - '.github/workflows/daily-theme-update.yml'
+      hours: { description: 'Coding hours', required: false, default: '' }
+      theme: { description: 'Theme name', required: false, default: '' }
 
 permissions:
   contents: write
@@ -25,37 +15,34 @@ jobs:
   update-theme:
     runs-on: ubuntu-latest
     env:
-      # 解决 Node 20 警告
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}   # 关键修改
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Update WakaTime Files
         id: update
         env:
           WAKATIME_TOKEN: ${{ secrets.WAKATIME_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           TZ: 'Asia/Shanghai'
-          MODEL_DEBUG: '1'               # 开启调试日志
           MODEL_NAME: 'openai/gpt-4o-mini'
-        run: |
-          node .github/scripts/update-wakatime.js
+          MODEL_DEBUG: '1'
+        run: node .github/scripts/update-wakatime.js
 
       - name: Commit and Push
         uses: EndBug/add-and-commit@v10
         with:
           add: 'assets/json/config.js assets/json/weekly.js'
           message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name || 'auto' }}"
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}   # ← 改成内置 token
           pull: true
           default_author: github_actions
