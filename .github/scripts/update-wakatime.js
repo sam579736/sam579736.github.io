@@ -77,7 +77,7 @@ async function fetchWeeklyRaw(startDate, endDate) {
   if (!WAKATIME_TOKEN) {
     throw new Error('WAKATIME_TOKEN is required.');
   }
-  const url = `https://wakatime.com/api/v1/users/current/summaries?start=${startDate}&end=${endDate}`;
+  const url = `https://wakatime.com/api/v1/users/current/summaries?start=${startDate}&end=${endDate}&timezone=${encodeURIComponent(TIME_ZONE)}`;
   const token = String(WAKATIME_TOKEN).trim();
   let authHeader = '';
   if (/^bearer\s+/i.test(token)) {

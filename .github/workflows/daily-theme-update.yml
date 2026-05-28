@@ -25,19 +25,18 @@ permissions:
   contents: write
   models: read
 
-FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true
 
 jobs:
   update-theme:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20'
       
       - name: Update WakaTime Files
         id: update
