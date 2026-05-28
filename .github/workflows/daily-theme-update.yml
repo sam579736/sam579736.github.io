@@ -20,6 +20,8 @@ permissions:
 jobs:
   update-theme:
     runs-on: ubuntu-latest
+    
+    # 强制使用 Node 24，减少警告
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -34,6 +36,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
 
       - name: Update WakaTime Files
         id: update
