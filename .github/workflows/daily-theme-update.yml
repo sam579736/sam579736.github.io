@@ -2,8 +2,9 @@ name: WakaTime Daily Theme Update
 
 on:
   schedule:
-    # 每天北京时间 08:07 (UTC 00:07) 运行一次
+    # 每天北京时间 08:07 (UTC 00:07) 运行
     - cron: '7 0 * * *'
+  
   # 手动触发
   workflow_dispatch:
     inputs:
@@ -15,7 +16,8 @@ on:
         description: 'Theme name (rest/relaxed/productive/focused/intense/legendary)'
         required: false
         default: ''
-  # push 到 gh-pages 分支时触发
+  
+  # push 到 gh-pages 时触发（可选）
   push:
     branches: [gh-pages]
     paths:
@@ -23,21 +25,22 @@ on:
 
 permissions:
   contents: write
-  models: read
-
 
 jobs:
   update-theme:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0   # 重要：确保能正确 pull 历史记录
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-
-          node-version: '20'      
+          node-version: '22'   # 升级到 22，解决 Node 20 弃用警告
+          cache: 'npm'         # 可选：加速安装
 
       - name: Update WakaTime Files
         id: update
@@ -50,11 +53,11 @@ jobs:
         run: |
           node .github/scripts/update-wakatime.js
 
-
-- name: Commit and Push
-  uses: EndBug/add-and-commit@v9
-  with:
-    add: 'assets/json/config.js assets/json/weekly.js'
-    message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name }}"
-    github_token: ${{ secrets.GH_TOKEN }}
-    pull: true  # ← Add this line to pull before pushing
+      - name: Commit and Push
+        uses: EndBug/add-and-commit@v10   # 升级到 v10
+        with:
+          add: 'assets/json/config.js assets/json/weekly.js'
+          message: "Update daily theme & weekly stats: ${{ steps.update.outputs.theme_name || 'auto' }}"
+          github_token: ${{ secrets.GH_TOKEN }}
+          pull: true                       # 自动 pull 再 push，解决 non-fast-forward
+          default_author: github_actions
