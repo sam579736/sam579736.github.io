@@ -46,11 +46,15 @@ async function fetchWeeklyRaw(startDate, endDate) {
   const url = `https://wakatime.com/api/v1/users/current/summaries?start=${startDate}&end=${endDate}&timezone=${encodeURIComponent(TIME_ZONE)}`;
   
   const token = String(WAKATIME_TOKEN).trim();
-  const authHeader = /^bearer\s+/i.test(token) 
-    ? token 
-    : /^waka_/i.test(token)
-      ? `Basic ${Buffer.from(`${token}:`).toString('base64')}`
-      : `Bearer ${token}`;
+  // WakaTime API keys (waka_ / waka_sec_) are write-only for plugins; reading
+  // summaries requires an OAuth access token (waka_tok_) sent as Bearer.
+  const authHeader = /^bearer\s+/i.test(token)
+    ? token
+    : /^waka_tok_/i.test(token)
+      ? `Bearer ${token}`
+      : /^waka_/i.test(token)
+        ? `Basic ${Buffer.from(`${token}:`).toString('base64')}`
+        : `Bearer ${token}`;
 
   const response = await httpRequestJson(url, 'GET', { Authorization: authHeader });
   return response;
